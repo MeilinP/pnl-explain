@@ -1,0 +1,100 @@
+FRTB-STYLE PROFIT-AND-LOSS ATTRIBUTION TEST
+========================================================================
+
+Risk-theoretical PnL = Greek explanation; hypothetical PnL = full reval.
+Basel thresholds: |mean ratio| <= 10%, variance ratio <= 20%.
+A desk that fails must use the standardised approach instead of an
+internal model, which materially increases its capital requirement.
+
+variant                        mean ratio   var ratio   spearman    result
+--------------------------------------------------------------------------
+1st order (D,V,T,R)               -0.85%       0.07%      1.0000      PASS
+2nd order (+G,Vanna,Volga)         0.05%       0.00%      1.0000      PASS
+delta=BS                           0.05%       0.00%      1.0000      PASS
+delta=SABR                        -0.48%       0.01%      1.0000      PASS
+delta=Bartlett                     1.10%       0.06%      1.0000      PASS
+vega=single                        0.20%       5.39%      0.9948      PASS
+vega=bucketed                      0.58%       3.35%      0.9965      PASS
+vega=exact(per-leg)                0.05%       0.00%      1.0000      PASS
+coarse (1st, single vega)          0.15%       4.26%      0.9971      PASS
+vol_dynamics=ewma                  0.05%       0.00%      1.0000      PASS
+vol_dynamics=gjr                   0.04%       0.00%      1.0000      PASS
+
+* = breaches its threshold.
+
+1st order (D,V,T,R):
+    mean(unexplained)  =            -255
+    std(actual)        =          29,827
+    mean ratio         =        -0.8546%   limit +/-10%   PASS
+    variance ratio     =         0.0696%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+2nd order (+G,Vanna,Volga):
+    mean(unexplained)  =              13
+    std(actual)        =          29,827
+    mean ratio         =         0.0453%   limit +/-10%   PASS
+    variance ratio     =         0.0013%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+delta=BS:
+    mean(unexplained)  =              13
+    std(actual)        =          29,827
+    mean ratio         =         0.0453%   limit +/-10%   PASS
+    variance ratio     =         0.0013%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+delta=SABR:
+    mean(unexplained)  =            -144
+    std(actual)        =          29,827
+    mean ratio         =        -0.4843%   limit +/-10%   PASS
+    variance ratio     =         0.0106%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+delta=Bartlett:
+    mean(unexplained)  =             327
+    std(actual)        =          29,827
+    mean ratio         =         1.0963%   limit +/-10%   PASS
+    variance ratio     =         0.0645%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+vega=single:
+    mean(unexplained)  =              61
+    std(actual)        =          29,827
+    mean ratio         =         0.2031%   limit +/-10%   PASS
+    variance ratio     =         5.3892%   limit  20%     PASS
+    spearman(exp,act)  =          0.9948   floor  0.80     PASS
+
+vega=bucketed:
+    mean(unexplained)  =             173
+    std(actual)        =          29,827
+    mean ratio         =         0.5813%   limit +/-10%   PASS
+    variance ratio     =         3.3499%   limit  20%     PASS
+    spearman(exp,act)  =          0.9965   floor  0.80     PASS
+
+vega=exact(per-leg):
+    mean(unexplained)  =              13
+    std(actual)        =          29,827
+    mean ratio         =         0.0453%   limit +/-10%   PASS
+    variance ratio     =         0.0013%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+coarse (1st, single vega):
+    mean(unexplained)  =              45
+    std(actual)        =          29,827
+    mean ratio         =         0.1515%   limit +/-10%   PASS
+    variance ratio     =         4.2584%   limit  20%     PASS
+    spearman(exp,act)  =          0.9971   floor  0.80     PASS
+
+vol_dynamics=ewma:
+    mean(unexplained)  =              13
+    std(actual)        =          29,827
+    mean ratio         =         0.0453%   limit +/-10%   PASS
+    variance ratio     =         0.0013%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS
+
+vol_dynamics=gjr:
+    mean(unexplained)  =              12
+    std(actual)        =          28,428
+    mean ratio         =         0.0405%   limit +/-10%   PASS
+    variance ratio     =         0.0018%   limit  20%     PASS
+    spearman(exp,act)  =          1.0000   floor  0.80     PASS

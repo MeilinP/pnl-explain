@@ -1,0 +1,12 @@
+{
+  "underlying": "SPY",
+  "rate_symbol": "^IRX",
+  "history_start": "2024-06-01",
+  "window": [
+    "2025-08-01",
+    "2026-08-07"
+  ],
+  "pulled_utc": "2026-08-10T02:57:11.479118+00:00",
+  "n_spot_rows": 547,
+  "n_rate_rows": 547
+}

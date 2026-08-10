@@ -1,0 +1,9 @@
+position_id,underlying,structure,option_type,strike,expiry,quantity,entry_date,multiplier
+STRAD_C625,SPY,long_straddle,C,625.0,2026-09-18,100,2025-08-01,100
+STRAD_P625,SPY,long_straddle,P,625.0,2026-09-18,100,2025-08-01,100
+STRNG_P560,SPY,short_strangle,P,560.0,2026-12-18,-80,2025-08-01,100
+STRNG_C690,SPY,short_strangle,C,690.0,2026-12-18,-80,2025-08-01,100
+CSPRD_C700,SPY,call_spread,C,700.0,2027-03-19,150,2025-08-01,100
+CSPRD_C760,SPY,call_spread,C,760.0,2027-03-19,-150,2025-08-01,100
+CAL_C650_FRT,SPY,calendar,C,650.0,2026-10-16,-120,2025-08-01,100
+CAL_C650_BCK,SPY,calendar,C,650.0,2027-06-17,120,2025-08-01,100
