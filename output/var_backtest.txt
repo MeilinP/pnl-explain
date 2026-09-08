@@ -1,0 +1,45 @@
+VaR BACKTEST -- historical simulation, 125-day rolling estimation window
+book: 8-leg SPY option book, snapshot 2026-08-07
+sample: 2025-08-04 .. 2026-08-07  (255 daily moves; 130 tested)
+
+--- confidence 95.0%  (alpha = 0.05) ---
+  observations tested        : 130
+  exceptions observed        : 12
+  exceptions expected        : 6.50
+  Kupiec POF   LR =   3.9632   p = 0.0465
+  Christoffersen indep. LR =   0.0152   p = 0.9020
+  Basel traffic light        : RED   (scaled from the 250-day definition)
+  verdict                    : exception count rejects the model; n=130 is below the 250-day Basel window; the count test has low power here and a green zone is weak evidence
+
+--- confidence 97.5%  (alpha = 0.025) ---
+  observations tested        : 130
+  exceptions observed        : 9
+  exceptions expected        : 3.25
+  Kupiec POF   LR =   7.0991   p = 0.0077
+  Christoffersen indep. LR =   0.0000   p = 1.0000
+  Basel traffic light        : RED   (scaled from the 250-day definition)
+  verdict                    : exception count rejects the model; n=130 is below the 250-day Basel window; the count test has low power here and a green zone is weak evidence
+
+--- confidence 99.0%  (alpha = 0.01) ---
+  observations tested        : 130
+  exceptions observed        : 3
+  exceptions expected        : 1.30
+  Kupiec POF   LR =   1.6400   p = 0.2003
+  Christoffersen indep. LR =   0.0000   p = 1.0000
+  Basel traffic light        : YELLOW   (scaled from the 250-day definition)
+  verdict                    : no rejection on either test; n=130 is below the 250-day Basel window; the count test has low power here and a green zone is weak evidence
+
+READING THESE NUMBERS
+  Kupiec tests the COUNT of exceptions; Christoffersen tests their
+  INDEPENDENCE. A model can pass the first and fail the second -- the right
+  number of exceptions, all inside one week -- and that is the failure mode
+  that costs money. Count-only backtesting cannot see it.
+
+  The tested sample is 130 days, below the 250-day Basel
+  window. At that length the Kupiec test has low power against moderate
+  misspecification, so a green zone here is weak evidence of adequacy and
+  not a pass. This is stated rather than left to be inferred.
+
+  The rolling window is also the model's memory: a 125-day window forgets a
+  shock 125 days after it happens, and the VaR path steps down on that date
+  for no reason present in the market.

@@ -1,0 +1,73 @@
+run,ewma_lambda,method,confidence,horizon_days,VaR,ES,n_obs,n_eff_tail,note
+sensitivity,0.9,historical,95%,1,53279.17,65749.61,255,13.0,
+sensitivity,0.9,parametric,95%,1,49134.62,61616.8,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.9,filtered_hs,95%,1,65455.26,95917.96,255,13.0,"EWMA lambda=0.9; current vol 35,383"
+sensitivity,0.9,full_reval,95%,1,45545.01,58061.44,255,13.0,full repricing under historical shocks
+sensitivity,0.9,historical,97.5%,1,65708.78,73151.12,255,7.0,
+sensitivity,0.9,parametric,97.5%,1,58547.51,69834.21,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.9,filtered_hs,97.5%,1,71140.23,120288.18,255,7.0,"EWMA lambda=0.9; current vol 35,383"
+sensitivity,0.9,full_reval,97.5%,1,53033.0,65796.0,255,7.0,full repricing under historical shocks
+sensitivity,0.9,historical,99%,1,70650.25,79784.13,255,3.0,only 3 obs in the tail; ES is not a stable estimate
+sensitivity,0.9,parametric,99%,1,69492.03,79614.56,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.9,filtered_hs,99%,1,157858.9,171647.13,255,3.0,"EWMA lambda=0.9; current vol 35,383"
+sensitivity,0.9,full_reval,99%,1,65588.4,80219.12,255,3.0,full repricing under historical shocks
+sensitivity,0.9,historical,95%,10,168483.54,207918.53,255,13.0,"sqrt-time scaled, assumes iid"
+sensitivity,0.9,parametric,95%,10,155377.32,194849.43,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.9,filtered_hs,95%,10,206987.72,303319.23,255,13.0,"EWMA lambda=0.9; current vol 35,383; sqrt-time scaled"
+sensitivity,0.9,full_reval,95%,10,144025.97,183606.38,255,13.0,full repricing under historical shocks; sqrt-time scaled
+sensitivity,0.9,historical,97.5%,10,207789.4,231324.15,255,7.0,"sqrt-time scaled, assumes iid"
+sensitivity,0.9,parametric,97.5%,10,185143.49,220835.17,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.9,filtered_hs,97.5%,10,224965.15,380384.63,255,7.0,"EWMA lambda=0.9; current vol 35,383; sqrt-time scaled"
+sensitivity,0.9,full_reval,97.5%,10,167705.06,208065.21,255,7.0,full repricing under historical shocks; sqrt-time scaled
+sensitivity,0.9,historical,99%,10,223415.7,252299.57,255,3.0,"only 3 obs in the tail; ES is not a stable estimate; sqrt-time scaled, assumes iid"
+sensitivity,0.9,parametric,99%,10,219753.11,251763.34,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.9,filtered_hs,99%,10,499193.67,542795.9,255,3.0,"EWMA lambda=0.9; current vol 35,383; sqrt-time scaled"
+sensitivity,0.9,full_reval,99%,10,207408.73,253675.12,255,3.0,full repricing under historical shocks; sqrt-time scaled
+baseline,0.94,historical,95%,1,53279.17,65749.61,255,13.0,
+baseline,0.94,parametric,95%,1,49134.62,61616.8,255,255.0,normal assumption; delta + gamma + vega
+baseline,0.94,filtered_hs,95%,1,64053.61,87442.67,255,13.0,"EWMA lambda=0.94; current vol 34,077"
+baseline,0.94,full_reval,95%,1,45545.01,58061.44,255,13.0,full repricing under historical shocks
+baseline,0.94,historical,97.5%,1,65708.78,73151.12,255,7.0,
+baseline,0.94,parametric,97.5%,1,58547.51,69834.21,255,255.0,normal assumption; delta + gamma + vega
+baseline,0.94,filtered_hs,97.5%,1,71016.01,105092.5,255,7.0,"EWMA lambda=0.94; current vol 34,077"
+baseline,0.94,full_reval,97.5%,1,53033.0,65796.0,255,7.0,full repricing under historical shocks
+baseline,0.94,historical,99%,1,70650.25,79784.13,255,3.0,only 3 obs in the tail; ES is not a stable estimate
+baseline,0.94,parametric,99%,1,69492.03,79614.56,255,255.0,normal assumption; delta + gamma + vega
+baseline,0.94,filtered_hs,99%,1,131685.78,142883.33,255,3.0,"EWMA lambda=0.94; current vol 34,077"
+baseline,0.94,full_reval,99%,1,65588.4,80219.12,255,3.0,full repricing under historical shocks
+baseline,0.94,historical,95%,10,168483.54,207918.53,255,13.0,"sqrt-time scaled, assumes iid"
+baseline,0.94,parametric,95%,10,155377.32,194849.43,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+baseline,0.94,filtered_hs,95%,10,202555.3,276518.01,255,13.0,"EWMA lambda=0.94; current vol 34,077; sqrt-time scaled"
+baseline,0.94,full_reval,95%,10,144025.97,183606.38,255,13.0,full repricing under historical shocks; sqrt-time scaled
+baseline,0.94,historical,97.5%,10,207789.4,231324.15,255,7.0,"sqrt-time scaled, assumes iid"
+baseline,0.94,parametric,97.5%,10,185143.49,220835.17,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+baseline,0.94,filtered_hs,97.5%,10,224572.35,332331.66,255,7.0,"EWMA lambda=0.94; current vol 34,077; sqrt-time scaled"
+baseline,0.94,full_reval,97.5%,10,167705.06,208065.21,255,7.0,full repricing under historical shocks; sqrt-time scaled
+baseline,0.94,historical,99%,10,223415.7,252299.57,255,3.0,"only 3 obs in the tail; ES is not a stable estimate; sqrt-time scaled, assumes iid"
+baseline,0.94,parametric,99%,10,219753.11,251763.34,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+baseline,0.94,filtered_hs,99%,10,416427.0,451836.78,255,3.0,"EWMA lambda=0.94; current vol 34,077; sqrt-time scaled"
+baseline,0.94,full_reval,99%,10,207408.73,253675.12,255,3.0,full repricing under historical shocks; sqrt-time scaled
+sensitivity,0.97,historical,95%,1,53279.17,65749.61,255,13.0,
+sensitivity,0.97,parametric,95%,1,49134.62,61616.8,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.97,filtered_hs,95%,1,66174.48,83523.27,255,13.0,"EWMA lambda=0.97; current vol 33,535"
+sensitivity,0.97,full_reval,95%,1,45545.01,58061.44,255,13.0,full repricing under historical shocks
+sensitivity,0.97,historical,97.5%,1,65708.78,73151.12,255,7.0,
+sensitivity,0.97,parametric,97.5%,1,58547.51,69834.21,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.97,filtered_hs,97.5%,1,74447.61,95217.76,255,7.0,"EWMA lambda=0.97; current vol 33,535"
+sensitivity,0.97,full_reval,97.5%,1,53033.0,65796.0,255,7.0,full repricing under historical shocks
+sensitivity,0.97,historical,99%,1,70650.25,79784.13,255,3.0,only 3 obs in the tail; ES is not a stable estimate
+sensitivity,0.97,parametric,99%,1,69492.03,79614.56,255,255.0,normal assumption; delta + gamma + vega
+sensitivity,0.97,filtered_hs,99%,1,107787.26,120962.09,255,3.0,"EWMA lambda=0.97; current vol 33,535"
+sensitivity,0.97,full_reval,99%,1,65588.4,80219.12,255,3.0,full repricing under historical shocks
+sensitivity,0.97,historical,95%,10,168483.54,207918.53,255,13.0,"sqrt-time scaled, assumes iid"
+sensitivity,0.97,parametric,95%,10,155377.32,194849.43,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.97,filtered_hs,95%,10,209262.07,264123.77,255,13.0,"EWMA lambda=0.97; current vol 33,535; sqrt-time scaled"
+sensitivity,0.97,full_reval,95%,10,144025.97,183606.38,255,13.0,full repricing under historical shocks; sqrt-time scaled
+sensitivity,0.97,historical,97.5%,10,207789.4,231324.15,255,7.0,"sqrt-time scaled, assumes iid"
+sensitivity,0.97,parametric,97.5%,10,185143.49,220835.17,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.97,filtered_hs,97.5%,10,235424.01,301105.0,255,7.0,"EWMA lambda=0.97; current vol 33,535; sqrt-time scaled"
+sensitivity,0.97,full_reval,97.5%,10,167705.06,208065.21,255,7.0,full repricing under historical shocks; sqrt-time scaled
+sensitivity,0.97,historical,99%,10,223415.7,252299.57,255,3.0,"only 3 obs in the tail; ES is not a stable estimate; sqrt-time scaled, assumes iid"
+sensitivity,0.97,parametric,99%,10,219753.11,251763.34,255,255.0,normal assumption; delta + gamma + vega; sqrt-time scaled
+sensitivity,0.97,filtered_hs,99%,10,340853.24,382515.71,255,3.0,"EWMA lambda=0.97; current vol 33,535; sqrt-time scaled"
+sensitivity,0.97,full_reval,99%,10,207408.73,253675.12,255,3.0,full repricing under historical shocks; sqrt-time scaled

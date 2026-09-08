@@ -89,5 +89,120 @@ check("bucket boundaries map correctly",
 check("calendar legs sit in different buckets at window end",
       bucket_of(year_fraction(end, "2026-10-16")) != bucket_of(year_fraction(end, "2027-06-17")))
 
+# ==========================================================================
+# Risk module -- invariants of the VaR/ES estimators and the stress framework
+# ==========================================================================
+
+from src.portfolio import MarketState, load_portfolio                 # noqa: E402
+from src.rates import build_level_overlay                             # noqa: E402
+from src.revalue import build_revaluer                                # noqa: E402
+from src.stress import stress_grid                                    # noqa: E402
+from src.var import (backtest_var, filtered_historical_var,           # noqa: E402
+                     full_reval_var, historical_var, parametric_var)
+
+ALPHAS = [0.05, 0.025, 0.01]      # 95%, 97.5%, 99% -- ascending confidence
+OUT = ROOT / CONFIG["output"]["dir"]
+
+# One market state at the end of the window: the book a risk report is about.
+_win = md.window
+_rv = md.realized_vol.reindex(_win).ffill()
+_lam = _rv / anchor
+# Same rate overlay run_risk.py uses, so the numbers printed here are the ones
+# in the report rather than a second, slightly different set.
+_ov = build_level_overlay(md.rate_level, curve.asof)
+_ov = _ov.reindex(_win).ffill() if _ov is not None else None
+_states = {d: MarketState(date=d, spot=float(md.spot.loc[d]),
+                          rate_shift=float(_ov.loc[d]) if _ov is not None else 0.0,
+                          vol_factor=float(_lam.loc[d]),
+                          realized_vol=float(_rv.loc[d])) for d in _win}
+_positions = load_portfolio(ROOT / "data" / "portfolio.csv")
+rev = build_revaluer(_positions, _states, curve, surface)
+
+print("\nrepricing adapter")
+z = rev(0.0, 0.0, 0.0)
+check("revalue(0, 0, 0) = 0", abs(z) < 1e-9, f"{z:.3e} on a book of {rev.base_value:,.0f}")
+check("a shocked reval actually moves the book",
+      abs(rev(-0.10, 0.05, 0.0)) > 1.0, f"{rev(-0.10, 0.05, 0.0):,.0f} at -10% spot / +5 vol pts")
+
+# Realised P&L. The attribution outputs when they exist -- these are invariants
+# of the estimators, so a deterministic synthetic series serves when they do not.
+_att_p = OUT / "daily_attribution.csv"
+if _att_p.exists():
+    _att = pd.read_csv(_att_p, index_col=0, parse_dates=True)
+    PNL = _att["actual"].to_numpy(float)
+    DS, DSIG, DR = (_att["dS_pct"].to_numpy(float),
+                    _att["dsig_vega_weighted"].to_numpy(float),
+                    _att["dr"].to_numpy(float))
+    _src = f"daily_attribution.csv, {len(PNL)} moves"
+else:
+    _rng = np.random.default_rng(11)
+    PNL = _rng.standard_t(4, 255) * 25_000.0
+    DS, DSIG, DR = PNL * 0.0, PNL * 0.0, PNL * 0.0
+    _src = "synthetic (run.py has not been run)"
+
+print(f"\nVaR estimators  [{_src}]")
+
+# Historical VaR is defined as an order statistic, with no interpolation. This
+# pins that definition: a future switch to np.quantile would change every
+# reported number and would otherwise pass silently.
+for a in ALPHAS:
+    got = historical_var(PNL, alpha=a).var
+    ordered = np.sort(-PNL)
+    k = min(max(int(np.ceil((1.0 - a) * ordered.size)) - 1, 0), ordered.size - 1)
+    check(f"historical VaR at {100 * (1 - a):g}% is order statistic k={k}",
+          got == ordered[k], f"{got:,.2f} vs {ordered[k]:,.2f}")
+
+# parametric needs a Greek frame aligned to the moves; reuse the exposure path.
+_exp_p = OUT / "exposures_daily.csv"
+if _exp_p.exists():
+    exposures_frame = pd.read_csv(_exp_p, index_col=0, parse_dates=True).iloc[:-1]
+    DS_ABS = _att["dS"].to_numpy(float)
+else:
+    exposures_frame = pd.DataFrame({"delta": np.full(len(PNL), 4_314.0),
+                                    "gamma": np.full(len(PNL), -29.9),
+                                    "vega": np.full(len(PNL), -133_800.0)})
+    DS_ABS = PNL * 0.0
+
+_estimators = {
+    "historical": lambda a: historical_var(PNL, alpha=a),
+    "parametric": lambda a: parametric_var(exposures_frame, DS_ABS, DSIG, alpha=a),
+    "filtered_hs": lambda a: filtered_historical_var(PNL, alpha=a),
+    "full_reval": lambda a: full_reval_var(rev, DS, DSIG, DR, alpha=a),
+}
+
+_results = {name: {a: fn(a) for a in ALPHAS} for name, fn in _estimators.items()}
+
+for name, byalpha in _results.items():
+    vars_ = [byalpha[a].var for a in ALPHAS]          # ALPHAS is ascending conf
+    check(f"{name}: VaR monotone increasing in confidence",
+          all(v2 >= v1 - 1e-9 for v1, v2 in zip(vars_, vars_[1:])),
+          " <= ".join(f"{v:,.0f}" for v in vars_))
+
+for name, byalpha in _results.items():
+    worst = min(byalpha[a].es - byalpha[a].var for a in ALPHAS)
+    check(f"{name}: ES >= VaR at every confidence", worst >= -1e-9,
+          f"min(ES - VaR) = {worst:,.2f}")
+
+print("\nbacktest")
+# Kupiec's LR is a likelihood ratio against the null that the exception rate is
+# alpha. When the observed rate IS alpha the two likelihoods coincide, so the
+# statistic is exactly zero -- constructed here rather than approached.
+_n, _a = 100, 0.05
+_losses = np.array([20.0] * 5 + [5.0] * 95)
+_bt = backtest_var(-_losses, np.full(_n, 10.0), alpha=_a)
+check("Kupiec LR = 0 when exceptions equal expectation",
+      _bt.n_exceptions == 5 and abs(_bt.expected - 5.0) < 1e-12
+      and abs(_bt.kupiec_lr) < 1e-12,
+      f"x={_bt.n_exceptions}, expected={_bt.expected:.2f}, LR={_bt.kupiec_lr:.3e}")
+
+print("\nstress grid")
+_spot = np.array([-0.10, -0.05, 0.0, 0.05, 0.10])
+_vol = np.array([-0.05, 0.0, 0.05])
+_grid = stress_grid(rev, _spot, _vol)
+_i0, _j0 = int(np.argmin(np.abs(_vol))), int(np.argmin(np.abs(_spot)))
+_cell = float(_grid.to_numpy(float)[_i0, _j0])
+check("stress grid (0, 0) cell = 0", abs(_cell) < 1e-9, f"{_cell:.3e}")
+check("stress grid has no missing cells", bool(np.isfinite(_grid.to_numpy(float)).all()))
+
 print(f"\n{'ALL CHECKS PASSED' if _fail == 0 else f'{_fail} CHECK(S) FAILED'}")
 sys.exit(1 if _fail else 0)
