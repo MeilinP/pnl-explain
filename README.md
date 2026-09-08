@@ -5,6 +5,18 @@ the unexplained residual, and uses the residual's *shape* to diagnose which term
 the model is missing. Volatility comes from the SABR calibration in Project 1;
 discounting comes from the bootstrapped SOFR OIS curve in Project 2.
 
+![Unexplained PnL diagnostics](output/residual_diagnostics.png)
+
+*Second-order attribution, BS delta, per-leg vega. Mean unexplained PnL is **$43** against
+$22,031 mean absolute daily PnL (R² 0.99999); 9 of 255 days fall beyond 2σ, and the single
+worst is the +2.91% gap on 2026-03-31.*
+
+![Comparison experiments](output/experiments.png)
+
+*Left to right: mean |residual| by attribution variant ($348 first order → $43 second order,
+and $3,795 when vega is collapsed to a single bucket); the vega-bucketing gain against the
+term-damping κ; and vanna attribution under symmetric EWMA vs GJR leverage.*
+
 ```bash
 python run.py                # full pipeline: data + all five experiments
 python run.py --stage data   # market data, surface and exposures only
