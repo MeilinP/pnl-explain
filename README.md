@@ -1,5 +1,11 @@
 # Option Portfolio PnL Explain Engine
 
+> **Archived — this project now lives in
+> [MeilinP/derivatives-pricing-risk](https://github.com/MeilinP/derivatives-pricing-risk)**
+> as the `attribution/` module (plus the `risk/` module built on it), merged with the SOFR curve bootstrap and the SABR
+> calibration it depends on. Development continues there; this repository is
+> kept read-only for its history.
+
 Decomposes the daily PnL of a SPY option book into Greek contributions, measures
 the unexplained residual, and uses the residual's *shape* to diagnose which term
 the model is missing. Volatility comes from the SABR calibration in Project 1;
